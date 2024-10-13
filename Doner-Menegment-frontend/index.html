@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Home</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class=" container p-5 mt-5 text-dark-emphasis">
+        <table class="table table-info table-striped" id="donorData">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Aadhar Number</th>
+                    <th>Donation Amount</th>
+                    <th>Premium Donor</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <form class="mt-5">
+            <div class="mb-3">
+                <label class="form-label">Donor Name</label>
+                <input type="text" class="form-control" id="txtDonorName" placeholder="Enter Donor Name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Donor City</label>
+                <input type="text" class="form-control" id="txtDonorCity" placeholder="Enter Donor City">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Donor aadhar</label>
+                <input type="number" maxlength="12" class="form-control" id="txtDonoraadhar"
+                    placeholder="Enter Donor aadhar Number">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Donor DonationAmt</label>
+                <input type="number" class="form-control" id="txtDonationAmt"
+                    placeholder="Enter Donation Amount">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Donor PremiumDonor</label>
+                <input type="text" readonly class="form-control" id="txtDonorPremiumDonor"
+                    placeholder="Enter PremiumDonor">
+            </div>
+            <div class="btn btn-info" id="btnAddDonor">Add Donor</div>
+        </form>
+    </div>
+    <script src="jquery.js" defer></script>
+    <script src="js/bootstrap.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchData);
+        document.querySelector('#btnAddDonor').addEventListener('click', addDonor);
+        document.querySelector('#txtDonationAmt').addEventListener("input", function(event) {
+        if (document.querySelector('#txtDonationAmt').value > 50000) {
+                    document.querySelector('#txtDonorPremiumDonor').value = "Yes";
+                }
+                else {
+                    document.querySelector('#txtDonorPremiumDonor').value = "No";
+                }  
+        });
+        function fetchData() {
+            $.ajax({
+                url: 'http://localhost:50156/api/DonorService',
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    const tbody = document.querySelector('#donorData').children[1];
+                    tbody.innerHTML = '';
+                    for (var i = 0; i < response.length; i++) {
+                        var tr = document.createElement('tr');
+                        tr.innerHTML =
+                            `<td>${response[i]['id']}</td>
+                        <td>${response[i]['name']}</td>
+                        <td>${response[i]['city']}</td>
+                        <td>${response[i]['aadhar_number']}</td>    
+                        <td>${response[i]['donation_amt']}</td>
+                        <td>${response[i]['premium_donor']}</td>`
+                        tbody.appendChild(tr);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', status, error);
+                }
+            });
+        }
+
+        function addDonor() {
+            if (document.querySelector('#txtDonorName').value.trim() === '') {
+                alert("Please enter Donor name");
+            }
+            else if (document.querySelector('#txtDonorCity').value.trim() === '') {
+                alert("Please enter Donor City");
+            }
+            else if (document.querySelector('#txtDonoraadhar').value.trim() === '') {
+                alert("Please enter Donor Aadhar Number");
+            }
+            else if (document.querySelector('#txtDonationAmt').value.trim() === '') {
+                alert("Please enter Donation amount");
+            }
+            else {
+                const Donor = {
+                    'name': document.querySelector('#txtDonorName').value,
+                    'city': document.querySelector('#txtDonorCity').value,
+                    'aadhar_number': document.querySelector('#txtDonoraadhar').value,
+                    'donation_amt': document.querySelector('#txtDonationAmt').value,
+                    'premium_donor': document.querySelector('#txtDonorPremiumDonor').value
+                }
+                const stringifiedData = JSON.stringify(Donor);
+                console.log(Donor);
+                $.ajax({
+                    url: 'http://localhost:50156/api/DonorService/' + document.getElementById("txtDonorName").value,
+                    type: 'POST',
+                    data: stringifiedData,
+                    contentType: 'application/json',
+                    success: function (response) {
+                        console.log(response);
+                        if (response['output']) {
+                            console.log(Donor);
+                            fetchData()
+                        }
+                        else {
+                            alert(response["message"]);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', status, error);
+                    }
+                });
+
+            }
+
+        }
+    </script>
+</body>
+
+</html>

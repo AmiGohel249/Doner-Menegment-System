@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DonorDBModelStoreContainer" CdmEntityContainer="DonorDBEntities">
+    <EntitySetMapping Name="TBLDonors">
+      <EntityTypeMapping TypeName="DonorDBModel.TBLDonor">
+        <MappingFragment StoreEntitySet="TBLDonor">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="aadhar_number" ColumnName="aadhar_number" />
+          <ScalarProperty Name="donation_amt" ColumnName="donation_amt" />
+          <ScalarProperty Name="premium_donor" ColumnName="premium_donor" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

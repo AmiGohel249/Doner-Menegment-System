@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splash Screen</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+        .splash-screen {
+            text-align: center;
+        }
+        .splash-screen img {
+            width: 150px;
+            height: 150px;
+        }
+        .splash-screen h1 {
+            font-size: 2rem;
+            color: #343a40;
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-screen">
+        <img src="Sky_Blue_HTML/assets/logo.jpg" alt="Logo">
+        <h1>Donor Management System</h1>
+    </div>
+    <script>
+        setTimeout(() => {
+            window.location.href = 'home.html';
+        }, 3000); // Redirects to home.html after 3 seconds
+    </script>
+</body>
+</html>
